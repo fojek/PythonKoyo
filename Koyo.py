@@ -120,6 +120,20 @@ class Koyo():
 		value =  ('{0:b}'.format(bytearray(data)[13]).zfill(8)[::-1])+\
 		('{0:b}'.format(bytearray(data)[14]).zfill(8)[::-1])
 		return value[input]=='1'
+	def ReadInputs(self):
+		msg='4841502900382808001900011e02014131'
+		try:
+			self.sock.sendto(bytearray.fromhex(msg),(self.ip,self.port))
+			reply1 = self.sock.recvfrom(1024)
+			data = self.sock.recvfrom(1024)[0]
+		except socket.timeout:
+			print 'Socket TimeOut'
+			return -1
+		if self.debug:
+			print bytearray(data)
+		value =  ('{0:b}'.format(bytearray(data)[13]).zfill(8)[::-1])+\
+		('{0:b}'.format(bytearray(data)[14]).zfill(8)[::-1])
+		return value
 	def ChangeIP(self,mac,newIP):
 		msg='4841506b04fa510f0015'+mac+'0c001000'+\
 		'{:02X}{:02X}{:02X}{:02X}'.format(*map(int, newIP.split('.')))
